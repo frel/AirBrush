@@ -111,7 +111,6 @@ public class AirBrush {
      * the following line:
      * Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
      */
-
     public static Bitmap fastblur(Bitmap sentBitmap, float scale, int radius) {
 
         int width = Math.round(sentBitmap.getWidth() * scale);

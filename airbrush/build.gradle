@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'AirBrush'
+
+    publishedGroupId = 'com.subgarden.android'
+    libraryName = 'AirBrush'
+    artifact = 'airbrush'
+
+    libraryDescription = 'AirBrush is a library for creating gradients that serve as placeholders until larger images can be loaded.'
+
+    siteUrl = 'https://github.com/frel/AirBrush'
+    gitUrl = 'https://github.com/frel/AirBrush.git'
+
+    libraryVersion = '0.5.0'
+
+    developerId = 'frel'
+    developerName = 'Fredrik H. Larsen'
+    developerEmail = 'fredrik@subgarden.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -27,5 +51,16 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support:support-annotations:25.3.0'
     testCompile 'junit:junit:4.12'
 }
+
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+// Scripts for uploading to bintray
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
