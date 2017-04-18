@@ -17,13 +17,15 @@ public class SimpleActivity extends AppCompatActivity {
     public final static String TAG = SimpleActivity.class.getSimpleName();
 
     protected int halfOfScreen;
+    protected int tinyImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple);
 
-        halfOfScreen = 5; //getResources().getDisplayMetrics().widthPixels / 2;
+        halfOfScreen = getResources().getDisplayMetrics().widthPixels / 2;
+        tinyImage = 5;
 
         GridViewAdapter gridAdapter = new GridViewAdapter(this, R.layout.grid_layout_item, getData());
         GridView gridView = (GridView) findViewById(R.id.grid_view);
@@ -38,19 +40,61 @@ public class SimpleActivity extends AppCompatActivity {
     private ArrayList<Item> getData() {
         final ArrayList<Item> imageItems = new ArrayList<>();
 
+        // Full size images
+        Bitmap bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test1, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test2, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test3, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test4, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test5, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test6, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
+
+        // Tiny blurred images. Note that the gradient will be based on the blurred image, and thus look more monochrome
         final int radius = 4;
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test1, halfOfScreen, halfOfScreen), 2, radius)));
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test2, halfOfScreen, halfOfScreen), 2, radius)));
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test3, halfOfScreen, halfOfScreen), 2, radius)));
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test4, halfOfScreen, halfOfScreen), 2, radius)));
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test5, halfOfScreen, halfOfScreen), 2, radius)));
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test6, halfOfScreen, halfOfScreen), 2, radius)));
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test7, halfOfScreen, halfOfScreen), 2, radius)));
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test8, halfOfScreen, halfOfScreen), 2, radius)));
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test9, halfOfScreen, halfOfScreen), 2, radius)));
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test10, halfOfScreen, halfOfScreen), 2, radius)));
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test11, halfOfScreen, halfOfScreen), 2, radius)));
-        imageItems.add(new Item(AirBrush.fastblur(decodeSampledBitmapFromResource(getResources(), R.drawable.test12, halfOfScreen, halfOfScreen), 2, radius)));
+        final int scale = 2;
+
+        Bitmap bitmapTiny = decodeSampledBitmapFromResource(getResources(), R.drawable.test1, tinyImage, tinyImage);
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test1, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.fastblur(bitmapTiny, scale, radius)));
+
+        bitmapTiny = decodeSampledBitmapFromResource(getResources(), R.drawable.test2, tinyImage, tinyImage);
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test2, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.fastblur(bitmapTiny, scale, radius)));
+
+        bitmapTiny = decodeSampledBitmapFromResource(getResources(), R.drawable.test3, tinyImage, tinyImage);
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test3, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.fastblur(bitmapTiny, scale, radius)));
+
+        bitmapTiny = decodeSampledBitmapFromResource(getResources(), R.drawable.test4, tinyImage, tinyImage);
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test4, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.fastblur(bitmapTiny, scale, radius)));
+
+        bitmapTiny = decodeSampledBitmapFromResource(getResources(), R.drawable.test5, tinyImage, tinyImage);
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test5, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.fastblur(bitmapTiny, scale, radius)));
+
+        bitmapTiny = decodeSampledBitmapFromResource(getResources(), R.drawable.test6, tinyImage, tinyImage);
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test6, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.fastblur(bitmapTiny, scale, radius)));
+
+        // More full size images
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test7, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test8, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test9, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test10, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test11, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
+        bitmap = decodeSampledBitmapFromResource(getResources(), R.drawable.test12, halfOfScreen, halfOfScreen);
+        imageItems.add(new Item(bitmap, AirBrush.getPalette(bitmap)));
 
         long totalSize = 0;
         for (int i = 0; i < imageItems.size(); i++) {
@@ -61,7 +105,6 @@ public class SimpleActivity extends AppCompatActivity {
             long megaBytes = bytes / 1024 / 1024 ;
             Log.d(TAG, "Dimensions: " + width + "x" + height + " Size: " + bytes + "B " + kiloBytes + "KB " + megaBytes + "MB");
             totalSize += bytes;
-
         }
 
         Log.d(TAG, "Total size of bitmaps in memory: " + (totalSize / 1024 / 1024));

@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,19 +58,38 @@ public class GridViewAdapter extends ArrayAdapter {
         }
 
         Item item = data.get(position);
-        Palette palette = item.getPalette();
-        Bitmap image = item.getImage();
-        Drawable gradient = AirBrush.getGradient(holder.image, palette);
-
-        TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[] {
-                gradient,
-                new BitmapDrawable(holder.image.getResources(), image)
-        });
+        TransitionDrawable transitionDrawable = getTransitionDrawable(holder, item);
         holder.image.setImageDrawable(transitionDrawable);
 
         transitionToImageDelayed(holder);
 
         return convertView;
+    }
+
+    @NonNull
+    private TransitionDrawable getTransitionDrawable(ViewHolder holder, Item item) {
+        TransitionDrawable transitionDrawable;
+        if (item.getBlurredPlaceholder() != null) {
+
+            Bitmap image = item.getImage();
+            Bitmap blurredPlaceholder = item.getBlurredPlaceholder();
+
+            transitionDrawable = new TransitionDrawable(new Drawable[] {
+                    new BitmapDrawable(holder.image.getResources(), blurredPlaceholder),
+                    new BitmapDrawable(holder.image.getResources(), image)
+            });
+        } else {
+            Palette palette = item.getPalette();
+            Bitmap image = item.getImage();
+            Drawable gradient = AirBrush.getGradient(holder.image, palette);
+
+            transitionDrawable= new TransitionDrawable(new Drawable[] {
+                    gradient,
+                    new BitmapDrawable(holder.image.getResources(), image)
+            });
+
+        }
+        return transitionDrawable;
     }
 
 

@@ -2,7 +2,6 @@ package com.subgarden.airbrush_project;
 
 import android.graphics.Bitmap;
 
-import com.subgarden.airbrush.AirBrush;
 import com.subgarden.airbrush.Palette;
 
 /**
@@ -12,10 +11,17 @@ public class Item {
 
     final private Palette palette;
     final private Bitmap image;
+    final private Bitmap blurredPlaceholder;
 
-    public Item(Bitmap image) {
-        this.palette = AirBrush.getPalette(image);
+    public Item(Bitmap image, Bitmap blurredPlaceholder) {
+        this.blurredPlaceholder = blurredPlaceholder;
         this.image = image;
+        this.palette = null;
+    }
+    public Item(Bitmap image, Palette palette) {
+        this.palette = palette;
+        this.image = image;
+        this.blurredPlaceholder = null;
     }
 
     public Palette getPalette() {
@@ -24,5 +30,9 @@ public class Item {
 
     public Bitmap getImage() {
         return image;
+    }
+
+    public Bitmap getBlurredPlaceholder() {
+        return blurredPlaceholder;
     }
 }

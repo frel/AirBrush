@@ -1,7 +1,6 @@
 package com.subgarden.airbrush;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ComposeShader;
 import android.graphics.LinearGradient;
@@ -50,29 +49,6 @@ public class AirBrush {
         return new Palette(upperLeftPixel, upperRightPixel, lowerLeftPixel, lowerRightPixel);
     }
 
-    private static int getAverageColor(int[] pixels) {
-        int redBucket = 0;
-        int greenBucket = 0;
-        int blueBucket = 0;
-        int alphaBucket = 0;
-
-        int pixelCount = pixels.length;
-
-        for (int i = 0; i < pixelCount; i++) {
-            int color = pixels[i];
-
-            redBucket += (color >> 16) & 0xFF;
-            greenBucket += (color >> 8) & 0xFF;
-            blueBucket += (color & 0xFF);
-            alphaBucket += (color >>> 24);
-        }
-
-        return Color.argb(alphaBucket / pixelCount,
-                          redBucket / pixelCount,
-                          greenBucket / pixelCount,
-                          blueBucket / pixelCount);
-    }
-
     public static Drawable getGradient(final View view,
                                        final Palette palette) {
 
@@ -105,30 +81,6 @@ public class AirBrush {
 
 
         return paintDrawable;
-    }
-
-    private static int calculateInSampleSize(BitmapFactory.Options options,
-                                             int reqWidth,
-                                             int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight
-                   && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
     }
 
     /**
