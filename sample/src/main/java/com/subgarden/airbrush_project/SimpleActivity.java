@@ -5,8 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.GridView;
 
 import com.subgarden.airbrush.AirBrush;
 
@@ -26,17 +27,17 @@ public class SimpleActivity extends AppCompatActivity {
 
         halfOfScreen = getResources().getDisplayMetrics().widthPixels / 2;
         tinyImage = 5;
+        int spanCount = 2;
 
-        GridViewAdapter gridAdapter = new GridViewAdapter(this, R.layout.grid_layout_item, getData());
-        GridView gridView = (GridView) findViewById(R.id.grid_view);
-        gridView.setAdapter(gridAdapter);
-        gridView.setColumnWidth(halfOfScreen);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        GridAdapter gridAdapter = new GridAdapter(getData());
+        recyclerView.setAdapter(gridAdapter);
 
-        gridView.setNumColumns(2);
-
+        GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
-    // Prepare some dummy data for gridview
+    // Prepare some dummy data for recycler view
     private ArrayList<Item> getData() {
         final ArrayList<Item> imageItems = new ArrayList<>();
 

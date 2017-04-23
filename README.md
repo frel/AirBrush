@@ -34,6 +34,7 @@ Simply call `Airbrush.getGradient(imageView, palette);` and use the Drawable as 
 There is also a utility method for creating a Palette based on a bitmap. This can be very handy while developing.
 `AirBrush.getPalette(bitmap);`
 
+_Note that the minimum supported API level is 11._
 ## Transitioning 
 
 By transitioning between the gradient and the actual image the effect is more noticeable.
@@ -66,10 +67,9 @@ Download
 
 ```groovy
 dependencies {
-  compile 'com.subgarden.android:airbrush:0.5.0'
+  compile 'com.subgarden.android:airbrush:0.5.1'
 }
 ```
-
 
 License
 -------

@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/frel/AirBrush'
     gitUrl = 'https://github.com/frel/AirBrush.git'
 
-    libraryVersion = '0.5.0'
+    libraryVersion = '0.5.1'
 
     developerId = 'frel'
     developerName = 'Fredrik H. Larsen'
@@ -29,10 +29,8 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 11
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -50,8 +48,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.0'
-    compile 'com.android.support:support-annotations:25.3.0'
+    compile 'com.android.support:support-annotations:25.3.1'
     testCompile 'junit:junit:4.12'
 }
 

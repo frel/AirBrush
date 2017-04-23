@@ -7,6 +7,9 @@ repositories {
     }
 }
 
+ext {
+    supportLibraryVersion = "25.3.1"
+}
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -31,10 +34,11 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.0'
-    compile 'com.android.support:support-annotations:25.3.0'
+    compile "com.android.support:appcompat-v7:" + supportLibraryVersion
+    compile "com.android.support:recyclerview-v7:" + supportLibraryVersion
+    compile "com.android.support:support-annotations:" + supportLibraryVersion
     testCompile 'junit:junit:4.12'
     // In order to use the airbrush module directly. Comment/uncomment below
-//    compile project(path: ':airbrush')
-    compile 'com.subgarden.android:airbrush:0.5.0'
+    compile project(path: ':airbrush')
+//    compile 'com.subgarden.android:airbrush:0.5.0'
 }

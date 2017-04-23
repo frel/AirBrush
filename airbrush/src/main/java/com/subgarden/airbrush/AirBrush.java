@@ -12,7 +12,6 @@ import android.graphics.drawable.PaintDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -73,12 +72,9 @@ public class AirBrush {
         PaintDrawable paintDrawable = new PaintDrawable();
         paintDrawable.setShape(new RectShape());
         paintDrawable.setShaderFactory(shaderFactory);
-        paintDrawable.setAutoMirrored(false);
 
-
-        // Unsupported using hardware acceleration
-        ViewCompat.setLayerType(view, View.LAYER_TYPE_SOFTWARE, null);
-
+        // Using ComposeShader within ComposeShader is not supported using hardware acceleration
+        view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         return paintDrawable;
     }
