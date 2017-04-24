@@ -1,5 +1,7 @@
 # AirBrush
 
+![Logo](website/airbrush-logo.png)
+
 _Be aware that this is still in alpha and applicable for breaking changes_
 
 AirBrush is an Android Library for creating gradients that serve as placeholder images while images are loading.
