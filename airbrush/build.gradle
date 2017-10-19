@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/frel/AirBrush'
     gitUrl = 'https://github.com/frel/AirBrush.git'
 
-    libraryVersion = '0.5.1'
+    libraryVersion = '0.6.0'
 
     developerId = 'frel'
     developerName = 'Fredrik H. Larsen'
@@ -25,12 +25,11 @@ ext {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
 
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 25
+        minSdkVersion 14
+        targetSdkVersion 26
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -44,12 +43,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:support-annotations:25.3.1'
-    testCompile 'junit:junit:4.12'
+    implementation "com.android.support:support-annotations:$supportLibraryVersion"
+    testImplementation 'junit:junit:4.12'
 }
 
 tasks.withType(Javadoc) {
