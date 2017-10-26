@@ -6,6 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context="com.subgarden.airbrush_project.SimpleActivity"
+    tools:context="com.subgarden.airbrush_project.com.subgarden.airbrushProject.SimpleActivity"
     />
 
