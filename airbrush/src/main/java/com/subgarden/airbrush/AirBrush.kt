@@ -4,131 +4,60 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.TransitionDrawable
-import android.os.AsyncTask
 import android.support.v8.renderscript.Allocation
 import android.support.v8.renderscript.Element
 import android.support.v8.renderscript.RenderScript
 import android.support.v8.renderscript.ScriptIntrinsicBlur
-import android.widget.ImageView
 
 /**
- * @author Fredrik Larsen <f@subgarden.com>
+ * @author Fredrik Larsen (fredrik@subgarden.com)
  */
-class AirBrush {
+class AirBrush(val context: Context) {
 
-    private var mInAllocation: Allocation? = null
-    private var mOutAllocation: Allocation? = null
-    private var mScript: ScriptC_gradient? = null
-    private var mCurrentTask: RenderScriptTask? = null
-    private var mBitmapOut: Bitmap? = null
-    private var mCurrentBitmap: Int = 0
-    private var mImageView: ImageView? = null
-    private var mWidth: Int = 0
-    private var mHeight: Int = 0
-    private var mBitmap: Bitmap? = null
+    private lateinit var inAllocation: Allocation
+    private lateinit var outAllocation: Allocation
+    private lateinit var script: ScriptC_gradient
+    private lateinit var bitmapOut: Bitmap
 
-    fun getDrawable(view: ImageView, bitmap: Bitmap, palette: Palette) {
-        mImageView = view
-        mBitmap = bitmap
-        createScript(view)
-        updateImage(0.5f, palette)
+    fun getGradient(palette: Palette, width: Int, height: Int) : Bitmap {
+        createScript(width, height)
+        script._gIn = inAllocation
+        script._gOut = outAllocation
+        script._gScript = script
+
+        script._gTopLeftColor = palette.topLeft
+        script._gTopRightColor = palette.topRight
+        script._gBottomRightColor = palette.bottomRight
+        script._gBottomLeftColor = palette.bottomLeft
+
+        script._gWidthPixels = width
+        script._gHeightPixels = height
+        script.invoke_filter()
+
+        // Copy to bitmap and invalidate image view
+        outAllocation.copyTo(bitmapOut)
+        return bitmapOut
     }
 
-    fun createScript(view: ImageView) {
+    private fun createScript(width: Int, height: Int) {
         // Initialize RS
-        val rs = RenderScript.create(view.context)
-        mWidth = view.width
-        mHeight = view.height
-
-        mBitmapOut = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888)
+        val rs = RenderScript.create(context)
+        bitmapOut = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
         // Allocate buffers
-        mInAllocation = Allocation.createFromBitmap(rs, mBitmapOut!!)
-        mOutAllocation = Allocation.createFromBitmap(rs, mBitmapOut!!)
+        inAllocation = Allocation.createFromBitmap(rs, bitmapOut)
+        outAllocation = Allocation.createFromBitmap(rs, bitmapOut)
 
         // Load script
-        mScript = ScriptC_gradient(rs)
-    }
-
-    private inner class RenderScriptTask(val mPalette: Palette) : AsyncTask<Float, Void, Int>() {
-        internal var issued: Boolean? = false
-        override fun doInBackground(vararg values: Float?): Int {
-
-            var index = -1
-            if (!isCancelled) {
-                issued = true
-                index = mCurrentBitmap
-
-                mScript!!._gIn = mInAllocation
-                mScript!!._gOut = mOutAllocation
-                mScript!!._gScript = mScript
-
-                mScript!!._gTopLeftColor = mPalette.topLeft
-                mScript!!._gTopRightColor = mPalette.topRight
-                mScript!!._gBottomRightColor = mPalette.bottomRight
-                mScript!!._gBottomLeftColor = mPalette.bottomLeft
-
-                mScript!!._gWidthPixels = mWidth
-                mScript!!._gHeightPixels = mHeight
-                mScript!!.invoke_filter()
-
-                // Copy to bitmap and invalidate image view
-                mOutAllocation!!.copyTo(mBitmapOut!!)
-                mCurrentBitmap = (mCurrentBitmap + 1) % NUM_BITMAPS
-            }
-            return index
-        }
-
-        internal fun updateView(result: Int?) {
-            if (result != -1) {
-                // Request UI update
-
-                val transitionDrawable = TransitionDrawable(arrayOf<Drawable>(BitmapDrawable(mImageView!!.resources, mBitmapOut), BitmapDrawable(mImageView!!.resources, mBitmap)))
-                mImageView!!.setImageDrawable(transitionDrawable)
-
-                mImageView!!.invalidate()
-            }
-        }
-
-        override fun onPostExecute(result: Int?) {
-            updateView(result)
-        }
-
-        override fun onCancelled(result: Int?) {
-            if (issued!!) {
-                updateView(result)
-            }
-        }
-    }
-
-    /**
-     * Invoke AsyncTask and cancel previous task. When AsyncTasks are piled up (typically in slow
-     * device with heavy kernel), Only the latest (and already started) task invokes RenderScript
-     * operation.
-     */
-    private fun updateImage(f: Float, palette: Palette) {
-        if (mCurrentTask != null) {
-            mCurrentTask!!.cancel(false)
-        }
-
-        mCurrentTask = RenderScriptTask(palette)
-        mCurrentTask!!.execute(f)
+        script = ScriptC_gradient(rs)
     }
 
     companion object {
 
-        val TAG = AirBrush::class.java.simpleName
-        private val NUM_BITMAPS = 2
-
+        /**
+         * Convenience method to get a palette from am bitmap.
+         */
         fun getPalette(bitmap: Bitmap): Palette {
-
-            if (bitmap == null) {
-                throw IllegalStateException("Unable to get color palette. Bitmap is null!")
-            }
-
             // Sample colors from the four corners. This should probably be an average, but for now this will do.
             // Note that we're not sampling the exact corner pixels, but slightly inset from the edges.
             val divisions = 6
@@ -157,7 +86,7 @@ class AirBrush {
             return color
         }
 
-        fun blur(context: Context, image: Bitmap, scale: Int, radius: Int): Bitmap {
+        private fun blur(context: Context, image: Bitmap, scale: Int, radius: Int): Bitmap {
             val width = Math.round((image.width * scale).toFloat())
             val height = Math.round((image.height * scale).toFloat())
 
@@ -175,6 +104,7 @@ class AirBrush {
 
             return outputBitmap
         }
+
     }
 
 }
