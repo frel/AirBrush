@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AirBrush-project</string>
+    <string name="reload_images">Reload images</string>
 </resources>
