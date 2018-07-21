@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 repositories {
     maven {
@@ -8,14 +10,17 @@ repositories {
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.subgarden.airbrush_project"
-        minSdkVersion 19
-        targetSdkVersion 26
+        minSdkVersion 16
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        renderscriptTargetApi 16
+        renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {
@@ -23,18 +28,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {
+    implementation project(path: ':airbrush')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation "com.android.support:appcompat-v7:" + supportLibraryVersion
-    implementation "com.android.support:recyclerview-v7:" + supportLibraryVersion
-    implementation "com.android.support:support-annotations:" + supportLibraryVersion
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
+    implementation "com.android.support:support-annotations:$supportLibraryVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    implementation ("com.github.bumptech.glide:okhttp3-integration:$glideVersion"){
+        exclude group: 'glide-parent'
+    }
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+
     testImplementation 'junit:junit:4.12'
-    // In order to use the airbrush module directly. Comment/uncomment below
-    implementation project(path: ':airbrush')
-//    compile 'com.subgarden.android:airbrush:0.5.0'
 }

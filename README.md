@@ -2,81 +2,140 @@
 
 ![Logo](website/airbrush-logo.png)
 
-_Be aware that this is still in alpha and applicable for breaking changes_
+_Be aware that **AirBrush** is still in development and applicable for breaking changes_
 
-AirBrush is an Android Library for creating gradients that serve as placeholder images while images are loading.
-Esthetically the gradients are very similar to a blurred version of the image they are representing. In fact that is the whole point of AirBrush.
+**AirBrush** is an Android library for simplifying the creation/handling of placeholder images that are shown while images are loading. Both pure gradients and tiny blurred images.
+Esthetically gradients are very similar to a blurred version of the image they are representing. In fact that was the main driver behind **AirBrush**.
 To esthetically approximate a blurred version of an image, without sending a lot of data.
 
-## Challenges with images
-In short: They are big. 
+## Challenges with loading images
+In short: They are big. And it takes time for the client to download and render them.
 
-You could get a nice blurred placeholder by receiving a small JPEG together with the full image URI. Potentially blurring it on the client.
-Imagine having an endlessly scrolling list of images in the app. The server would then need to provide a JPEG placeholder for all the images. 
-That would quickly increase the bandwidth usage of any servers running a large amount of users.
+Instead of just waiting for the image to load, many apps use default placeholder icons or random colors until the image has loaded. And while that looks
+better than having nothing, it is still totally unrelated to the final image.
 
-However, it might be adequate to provide an extremely small image of e.g. 5x5 pixels. Compressed as a JPEG it would take around 50 bytes.
-Perhaps even smaller if the JPEG header could be omitted (i.e. added by the client). For more information see [Facebook's great blog post](https://code.facebook.com/posts/991252547593574/the-technology-behind-preview-photos).
+The perceived performance increases if we can show something that approximates the final image.
 
-(More on that in the future)
+Depending on how much bandwidth you can use, the choice is yours.
+In the server item response, as part of the metadata add a tiny 10x10 jpeg, or even just four colors!
 
-### The gradient
-The gradient consist of four colors, one for each corner. They are represented using a Palette.
+### Gradient Palette - approximating the original image
+The gradient consist of four colors, one for each corner.
 
-### The Palette
-The color palette is intended to be passed along with other meta data, such as the image URI. 
-This allows a client to display a gradient while it is loading a bigger image. 
-On devices with slow network connections, this is especially noticeable. 
+The color palette is intended to be passed along with other meta data, such as the image URI.
+This allows a client to display the gradient while it is loading a bigger image.
+On devices with slow network connections, this is especially noticeable.
 
-# Usage 
+The implementation uses RenderScript and efficiently generates a Bitmap gradient from the color palette.
 
+### TinyThumb - approximating the original image... even more
 
-Simply call `Airbrush.getGradient(imageView, palette);` and use the Drawable as you see fit.
+For the purpose of image loading placeholders, a four color gradient will approximate the original image quite nicely.
+However, for an even better approximation a tiny e.g. 10x10 pixel image can be used. Compressed as JPEG and encoded as base64 it would be small.
+Even smaller if the JPEG header could be omitted (i.e. added by the client). The client can then blur the image at runtime.
+This is exactly what [Facebook's great blog post](https://code.facebook.com/posts/991252547593574/the-technology-behind-preview-photos)
+talks about in greater detail. **AirBrush** provides its own implementation for doing this and it's called _TinyThumb_.
 
-There is also a utility method for creating a Palette based on a bitmap. This can be very handy while developing.
-`AirBrush.getPalette(bitmap);`
+## Integration with [Glide]
 
-_Note that the minimum supported API level is 11._
-## Transitioning 
+AirBrush is an integration library for Glide and adds custom loaders for GradientPalette and TinyThumb.
+Using a cross-fade between the images makes the transition look much better. See the sample app for implementation details.
 
-By transitioning between the gradient and the actual image the effect is more noticeable.
-Here is an example, however, I would recommend using an image loading library such as [Glide][1] instead.
+Why use Glide? It's a stable library used by many and it provides great caching. Instead of reinventing the wheel so to speak, **AirBrush** uses Glide for simplicity and performance.
 
-Assuming that `item` is an instance holding the metadata.
+### Image Loading
 
-```java
-void onImageLoaded(Bitmap image) {
-    Palette palette = item.getPalette();
-    Drawable gradient = AirBrush.getGradient(imageView, palette);
+For loading TinyThumb or GradientPalette with Glide, load it directly.
+For TinyThumb:
 
-    TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[] {
-        gradient,
-        new BitmapDrawable(getResources(), image)
-    });
-    imageView.setImageDrawable(transitionDrawable);
-    transitionDrawable.startTransition(300);
-}
+```
+    val tinyThumb = getTinyThumb()
+    requestManager
+                .load(imageUri)
+                .thumbnail(requestManager.load(tinyThumb))
+                .into(imageView)
 ```
 
-            
+For GradientPalette:
+```
+    val gradientPalette = getGradientPalette()
+    requestManager
+                .load(imageUri)
+                .thumbnail(requestManager.load(gradientPalette))
+                .into(imageView)
+```
 
-It should be noted that since AirBrush is using [ComposeShader] inside a ComposeShader, the view layer has to be rendered in software. AirBrush does this for you by calling
-`ViewCompat.setLayerType(view, View.LAYER_TYPE_SOFTWARE, null);` See [Unsupported Drawing Operations][3].
+For generating a gradient without using the Glide components:
+```
+AirBrush(context).getGradient(gradientPalette, width, height)
+```
 
+### Customizing AirBrush
+
+_If you're not familiar with how Glide allows you to add/remove/replace loaders and resource decoders please have a [read here]._
+
+AirBrush adds the necessary loaders and decoders for the two types _TinyThumb_ and _GradientPalette_.
+
+```
+    /* LibraryGlideModule */
+    override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
+        registry.append(GradientPalette::class.java, GradientPalette::class.java, PaletteModelLoader.Factory())
+        registry.append(GradientPalette::class.java, BitmapDrawable::class.java, GradientPaletteDecoder(context, glide.bitmapPool))
+
+        registry.append(TinyThumb::class.java, TinyThumb::class.java, TinyThumbLoader.Factory())
+        registry.append(TinyThumb::class.java, BitmapDrawable::class.java, TinyThumbDecoder(context, glide.bitmapPool) { bitmap ->
+            AirBrush.blur(context, bitmap, scale = 1f, radius = 15f)
+        })
+    }
+```
+
+If you want to change any of the loaders/decoders or simple want to adjust the blur you can do that in the app's AppGlideModule
+
+```
+    /* AppGlideModule */
+    // This is how custom blurring can be achieved with AirBrush.
+    registry.prepend(TinyThumb::class.java, BitmapDrawable::class.java,  TinyThumbDecoder(context, glide.bitmapPool) { bitmap ->
+        AirBrush.blur(context, bitmap, scale = 1f, radius = 20f)
+    })
+```
+
+
+### Utility methods
+
+A fast blur implementation using RenderScript. This is used by TinyThumb by default.
+```
+AirBrush.blur(context, bitmap, scale, radius)
+```
+
+This is a convenience method for getting a GradientPalette while developing.
+```
+AirBrush.getPalette(bitmap);
+```
+
+
+Minimum SDK supported
+---------------------
+- 16
+
+
+Dependencies (added by AirBrush)
+--------------------------------
+- [Glide] 4.3.1 or newer
+- [RenderScript]
 
 Download
 --------
 
 ```groovy
 dependencies {
-  compile 'com.subgarden.android:airbrush:0.5.1'
+  compile 'com.subgarden.android:airbrush:0.6.0'
 }
 ```
 
 License
 -------
 
-    Copyright 2017 Fredrik Haugen Larsen
+    Copyright 2018 Fredrik Haugen Larsen
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -90,6 +149,6 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
 
-[1]: https://github.com/bumptech/glide
-[ComposeShader]: https://developer.android.com/reference/android/graphics/ComposeShader.html
-[3]: https://developer.android.com/guide/topics/graphics/hardware-accel.html#unsupported
+[Glide]: https://github.com/bumptech/glide
+[RenderScript]: https://developer.android.com/guide/topics/renderscript/compute
+[read here]: https://bumptech.github.io/glide/tut/custom-modelloader.html
