@@ -70,6 +70,14 @@ For generating a gradient without using the Glide components:
 AirBrush(context).getGradient(gradientPalette, width, height)
 ```
 
+### Clean up
+
+**AirBrush** retains a shared instance of RenderScript for efficiency. If you're not going to use **AirBrush** for a while you can
+clear any references by calling:
+```
+Airbrush.cleanup()
+```
+
 ### Customizing AirBrush
 
 _If you're not familiar with how Glide allows you to add/remove/replace loaders and resource decoders please have a [read here]._
@@ -122,6 +130,7 @@ Dependencies (added by AirBrush)
 --------------------------------
 - [Glide] 4.3.1 or newer
 - [RenderScript]
+- [Palette]
 
 Download
 --------
@@ -151,4 +160,5 @@ License
 
 [Glide]: https://github.com/bumptech/glide
 [RenderScript]: https://developer.android.com/guide/topics/renderscript/compute
+[Palette]: https://developer.android.com/reference/android/support/v7/graphics/Palette
 [read here]: https://bumptech.github.io/glide/tut/custom-modelloader.html

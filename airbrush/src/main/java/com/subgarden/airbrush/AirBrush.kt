@@ -15,7 +15,7 @@ import com.subgarden.airbrush.loaders.GradientPalette
 /**
  * @author Fredrik Larsen (fredrik@subgarden.com)
  */
-class AirBrush(val context: Context) {
+class AirBrush(private val context: Context) {
 
     private lateinit var inAllocation: Allocation
     private lateinit var outAllocation: Allocation

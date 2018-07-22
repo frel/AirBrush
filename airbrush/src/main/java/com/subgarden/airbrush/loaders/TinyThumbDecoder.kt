@@ -65,7 +65,7 @@ class TinyThumbDecoder(
      * Prepends the header to the base64 string. This would normally be done to reduce the size of
      * the payload where the header would be the same for all items
      */
-    private fun prependHeader(thumb: TinyThumb): Base64String {
+    private fun prependHeader(@Suppress("UNUSED_PARAMETER") thumb: TinyThumb): Base64String {
         TODO("Not implemented. Want to contribute?")
     }
 
