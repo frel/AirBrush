@@ -8,6 +8,11 @@ _Be aware that **AirBrush** is still in development and applicable for breaking 
 Esthetically gradients are very similar to a blurred version of the image they are representing. In fact that was the main driver behind **AirBrush**.
 To esthetically approximate a blurred version of an image, without sending a lot of data.
 
+## Sample app
+![Sample app using AirBrush](website/sample-app.gif)
+
+Note that a gif can not do gradients justice.
+
 ## Challenges with loading images
 In short: They are big. And it takes time for the client to download and render them.
 
