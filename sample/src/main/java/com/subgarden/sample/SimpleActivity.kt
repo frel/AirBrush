@@ -16,7 +16,7 @@ class SimpleActivity : AppCompatActivity() {
         const val SPAN_COUNT = 3
     }
 
-    lateinit var adapter: GridAdapter
+    private lateinit var adapter: GridAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
