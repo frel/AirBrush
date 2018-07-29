@@ -53,25 +53,25 @@ Why use Glide? It's a stable library used by many and it provides great caching.
 For loading TinyThumb or GradientPalette with Glide, load it directly.
 For TinyThumb:
 
-```
-    val tinyThumb = getTinyThumb()
-    requestManager
-                .load(imageUri)
-                .thumbnail(requestManager.load(tinyThumb))
-                .into(imageView)
+```kotlin
+val tinyThumb = getTinyThumb()
+requestManager
+        .load(imageUri)
+        .thumbnail(requestManager.load(tinyThumb))
+        .into(imageView)
 ```
 
 For GradientPalette:
-```
-    val gradientPalette = getGradientPalette()
-    requestManager
-                .load(imageUri)
-                .thumbnail(requestManager.load(gradientPalette))
-                .into(imageView)
+```kotlin
+val gradientPalette = getGradientPalette()
+requestManager
+        .load(imageUri)
+        .thumbnail(requestManager.load(gradientPalette))
+        .into(imageView)
 ```
 
 For generating a gradient without using the Glide components:
-```
+```kotlin
 AirBrush(context).getGradient(gradientPalette, width, height)
 ```
 
@@ -79,7 +79,7 @@ AirBrush(context).getGradient(gradientPalette, width, height)
 
 **AirBrush** retains a shared instance of RenderScript for efficiency. If you're not going to use **AirBrush** for a while you can
 clear any references by calling:
-```
+```kotlin
 Airbrush.cleanup()
 ```
 
@@ -89,39 +89,39 @@ _If you're not familiar with how Glide allows you to add/remove/replace loaders 
 
 AirBrush adds the necessary loaders and decoders for the two types _TinyThumb_ and _GradientPalette_.
 
-```
-    /* LibraryGlideModule */
-    override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        registry.append(GradientPalette::class.java, GradientPalette::class.java, PaletteModelLoader.Factory())
-        registry.append(GradientPalette::class.java, BitmapDrawable::class.java, GradientPaletteDecoder(context, glide.bitmapPool))
+```kotlin
+/* LibraryGlideModule */
+override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
+    registry.append(GradientPalette::class.java, GradientPalette::class.java, PaletteModelLoader.Factory())
+    registry.append(GradientPalette::class.java, BitmapDrawable::class.java, GradientPaletteDecoder(context, glide.bitmapPool))
 
-        registry.append(TinyThumb::class.java, TinyThumb::class.java, TinyThumbLoader.Factory())
-        registry.append(TinyThumb::class.java, BitmapDrawable::class.java, TinyThumbDecoder(context, glide.bitmapPool) { bitmap ->
-            AirBrush.blur(context, bitmap, scale = 1f, radius = 15f)
-        })
-    }
+    registry.append(TinyThumb::class.java, TinyThumb::class.java, TinyThumbLoader.Factory())
+    registry.append(TinyThumb::class.java, BitmapDrawable::class.java, TinyThumbDecoder(context, glide.bitmapPool) { bitmap ->
+        AirBrush.blur(context, bitmap, scale = 1f, radius = 15f)
+    })
+}
 ```
 
 If you want to change any of the loaders/decoders or simple want to adjust the blur you can do that in the app's AppGlideModule
 
-```
-    /* AppGlideModule */
-    // This is how custom blurring can be achieved with AirBrush.
-    registry.prepend(TinyThumb::class.java, BitmapDrawable::class.java,  TinyThumbDecoder(context, glide.bitmapPool) { bitmap ->
-        AirBrush.blur(context, bitmap, scale = 1f, radius = 20f)
-    })
+```kotlin
+/* AppGlideModule */
+// This is how custom blurring can be achieved with AirBrush.
+registry.prepend(TinyThumb::class.java, BitmapDrawable::class.java,  TinyThumbDecoder(context, glide.bitmapPool) { bitmap ->
+    AirBrush.blur(context, bitmap, scale = 1f, radius = 20f)
+})
 ```
 
 
 ### Utility methods
 
 A fast blur implementation using RenderScript. This is used by TinyThumb by default.
-```
+```kotlin
 AirBrush.blur(context, bitmap, scale, radius)
 ```
 
 This is a convenience method for getting a GradientPalette while developing.
-```
+```kotlin
 AirBrush.getPalette(bitmap);
 ```
 
@@ -140,9 +140,14 @@ Dependencies (added by AirBrush)
 Download
 --------
 
+
 ```groovy
+repositories {
+    jcenter()
+}
+
 dependencies {
-  compile 'com.subgarden.android:airbrush:0.6.0'
+    implementation "com.subgarden.android:airbrush:0.6.0"
 }
 ```
 

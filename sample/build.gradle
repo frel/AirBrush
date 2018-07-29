@@ -3,12 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-repositories {
-    maven {
-        url 'https://dl.bintray.com/frel/maven/'
-    }
-}
-
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -19,8 +13,6 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        renderscriptTargetApi 16
-        renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {
