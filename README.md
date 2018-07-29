@@ -106,10 +106,14 @@ If you want to change any of the loaders/decoders or simple want to adjust the b
 
 ```kotlin
 /* AppGlideModule */
-// This is how custom blurring can be achieved with AirBrush.
-registry.prepend(TinyThumb::class.java, BitmapDrawable::class.java,  TinyThumbDecoder(context, glide.bitmapPool) { bitmap ->
-    AirBrush.blur(context, bitmap, scale = 1f, radius = 20f)
-})
+override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
+    // ...
+
+    // This is how custom blurring can be achieved with AirBrush.
+    registry.prepend(TinyThumb::class.java, BitmapDrawable::class.java,  TinyThumbDecoder(context, glide.bitmapPool) { bitmap ->
+        AirBrush.blur(context, bitmap, scale = 1f, radius = 20f)
+    })
+}
 ```
 
 
