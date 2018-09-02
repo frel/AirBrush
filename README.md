@@ -102,24 +102,26 @@ override fun registerComponents(context: Context, glide: Glide, registry: Regist
 }
 ```
 
-If you want to change any of the loaders/decoders or simple want to adjust the blur you can do that in the app's AppGlideModule
+If you want to change any of the loaders/decoders or simply want to adjust the TinyThumb blur you can do that in the app's AppGlideModule.
+It's also easy to change the default base64 decode flag.
 
 ```kotlin
 /* AppGlideModule */
 override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
     // ...
 
-    // This is how custom blurring can be achieved with AirBrush.
-    registry.prepend(TinyThumb::class.java, BitmapDrawable::class.java,  TinyThumbDecoder(context, glide.bitmapPool) { bitmap ->
+   // This is how AirBrush's TinyThumb can be customised. E.g. blurring and the Base64 decode flag.
+    val decoder = TinyThumbDecoder(context, glide.bitmapPool, Base64.URL_SAFE) { bitmap ->
         AirBrush.blur(context, bitmap, scale = 1f, radius = 20f)
-    })
+    }
+    registry.prepend(TinyThumb::class.java, BitmapDrawable::class.java, decoder)
 }
 ```
 
 
 ### Utility methods
 
-A fast blur implementation using RenderScript. This is used by TinyThumb by default.
+A fast blur implementation using RenderScript. This is the default blur implementation TinyThumb uses by default.
 ```kotlin
 AirBrush.blur(context, bitmap, scale, radius)
 ```
@@ -144,16 +146,28 @@ Dependencies (added by AirBrush)
 Download
 --------
 
-
 ```groovy
 repositories {
     jcenter()
 }
 
 dependencies {
-    implementation "com.subgarden.android:airbrush:0.6.0"
+    implementation "com.subgarden.android:airbrush:0.6.1"
 }
 ```
+
+Remember to add RenderScript to your app's gradle build config:
+
+```
+android {
+    defaultConfig {
+        renderscriptTargetApi 16
+        renderscriptSupportModeEnabled true
+
+    }
+}
+``` 
+
 
 License
 -------
