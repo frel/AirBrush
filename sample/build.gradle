@@ -30,7 +30,7 @@ android {
 dependencies {
     // Switch to test the artifact or the project
     implementation project(path: ':airbrush')
-//    implementation "com.subgarden.android:airbrush:0.6.0"
+//    implementation "com.subgarden.android:airbrush:0.6.1"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
