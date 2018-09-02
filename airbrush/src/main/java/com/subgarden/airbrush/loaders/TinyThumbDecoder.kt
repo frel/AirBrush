@@ -19,12 +19,16 @@ typealias Base64String = String
  *
  * Hardware acceleration (for the upscaling) should be used to render the final view.
  *
+ * @param context An Android context used for accessing resources.
+ * @param bitmapPool A Glide bitmap pool used to retrieve bitmaps.
+ * @param base64DecoderFlag The type of base64 decode flag to use. Defaults to [Base64.DEFAULT].
+ * @param blurProvider A higher order function that returns a blurred bitmap.
  * @author Fredrik Larsen (fredrik@subgarden.com)
  */
-class TinyThumbDecoder(
+class TinyThumbDecoder @JvmOverloads constructor(
         private var context: Context,
         private val bitmapPool: BitmapPool,
-        private val bitmapProvider: ((thumb: TinyThumb, width: Int, height: Int) -> Bitmap)? = null,
+        private val base64DecoderFlag: Int = Base64.DEFAULT,
         private val blurProvider: (source: Bitmap) -> Bitmap)
     : ResourceDecoder<TinyThumb, BitmapDrawable> {
 
@@ -35,8 +39,7 @@ class TinyThumbDecoder(
     override fun decode(source: TinyThumb, width: Int, height: Int, options: Options): Resource<BitmapDrawable>? {
         // Down sample the blurred bitmap to save resources. The later hardware upscale will look almost identical anyway.
         val sampleSize = 6
-        val bitmap = bitmapProvider?.invoke(source, width / sampleSize, height / sampleSize)
-                ?: generateBitmap(source, width / sampleSize, height / sampleSize)
+        val bitmap = generateBitmap(source, width / sampleSize, height / sampleSize)
 
         return LazyBitmapDrawableResource.obtain(context.resources, bitmapPool, bitmap)
     }
@@ -47,14 +50,18 @@ class TinyThumbDecoder(
      */
     private fun generateBitmap(thumb: TinyThumb, width: Int, height: Int): Bitmap {
         val base64 = if (thumb.header.isNotBlank()) prependHeader(thumb) else thumb.base64
-        val bytes = Base64.decode(base64, Base64.URL_SAFE)
+        // The item can override the decode flag
+        val decodeFlag = if (thumb.base64DecodeFlag > 0) thumb.base64DecodeFlag else base64DecoderFlag
+        val bytes = Base64.decode(base64, decodeFlag)
 
         val options = BitmapFactory.Options().apply {
             // RGB565 will take less memory, but the resulting gradient is horrible.
             inPreferredConfig = Bitmap.Config.ARGB_8888
         }
         // Convert the byte array into a bitmap.
-        val source = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
+        val source = requireNotNull(BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)) {
+            "Failed to decode byte array. This can happen if the decode flag does not match the flag the data was encoded with."
+        }
 
         // If the thumb is square or landscape, center crop it. Otherwise leave it as is.
         val centerCrop = crop(source, width, height, 0.5f, 1f)

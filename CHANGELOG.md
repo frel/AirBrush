@@ -1,5 +1,15 @@
 # AirBrush changelog
 
+## Version 0.6.1
+
+A few enhancements: 
+- TinyThumbDecoder now supports a different default base64 decode flag.
+- TinyThumb can now override the default base64 decode flag.
+- Removed bitmapProvider from TinyThumbDecoder. A custom decoder class should be used instead.
+- Added @JvmOverload to better support default arguments from Java
+- Added more documentation
+- Upgraded to latest kotlin and support library versions
+
 ## Version 0.6.0
 Big rewrite for optimization.
 - Using Glide 4 and custom loaders to for thumbnails.

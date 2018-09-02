@@ -2,6 +2,7 @@ package com.subgarden.sample
 
 import android.content.Context
 import android.graphics.drawable.BitmapDrawable
+import android.util.Base64
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
@@ -30,9 +31,10 @@ open class GlideModule : AppGlideModule() {
         val factory = OkHttpUrlLoader.Factory(client)
         glide.registry.replace(GlideUrl::class.java, InputStream::class.java, factory)
 
-        // This is how custom blurring can be achieved with AirBrush.
-        registry.prepend(TinyThumb::class.java, BitmapDrawable::class.java,  TinyThumbDecoder(context, glide.bitmapPool) { bitmap ->
+        // This is how AirBrush's TinyThumb can be customised. E.g. blurring and the Base64 decode flag.
+        val decoder = TinyThumbDecoder(context, glide.bitmapPool, Base64.URL_SAFE) { bitmap ->
             AirBrush.blur(context, bitmap, scale = 1f, radius = 20f)
-        })
+        }
+        registry.prepend(TinyThumb::class.java, BitmapDrawable::class.java, decoder)
     }
 }
