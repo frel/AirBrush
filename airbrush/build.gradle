@@ -16,7 +16,7 @@ ext {
     siteUrl = 'https://github.com/frel/AirBrush'
     gitUrl = 'https://github.com/frel/AirBrush.git'
 
-    libraryVersion = '0.6.0'
+    libraryVersion = '0.6.1'
 
     developerId = 'frel'
     developerName = 'Fredrik H. Larsen'
@@ -34,7 +34,7 @@ android {
         targetSdkVersion 27
 
         versionName libraryVersion
-        versionCode 60
+        versionCode 61
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -67,7 +67,7 @@ android {
 dependencies {
     implementation "com.android.support:support-annotations:$supportLibraryVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation ("com.android.support:palette-v7:$supportLibraryVersion")
+    implementation "com.android.support:palette-v7:$supportLibraryVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
     testImplementation 'junit:junit:4.12'
