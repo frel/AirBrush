@@ -12,7 +12,7 @@ import com.bumptech.glide.signature.ObjectKey
  */
 class PaletteModelLoader : ModelLoader<GradientPalette, GradientPalette> {
 
-    override fun buildLoadData(model: GradientPalette, width: Int, height: Int, options: Options?): ModelLoader.LoadData<GradientPalette>? {
+    override fun buildLoadData(model: GradientPalette, width: Int, height: Int, options: Options): ModelLoader.LoadData<GradientPalette>? {
         return ModelLoader.LoadData(ObjectKey(model.toString()), GradientPaletteDataFetcher(model))
     }
 
@@ -22,7 +22,7 @@ class PaletteModelLoader : ModelLoader<GradientPalette, GradientPalette> {
 
     class Factory : ModelLoaderFactory<GradientPalette, GradientPalette> {
 
-        override fun build(multiFactory: MultiModelLoaderFactory?): ModelLoader<GradientPalette, GradientPalette> = PaletteModelLoader()
+        override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<GradientPalette, GradientPalette> = PaletteModelLoader()
 
         override fun teardown() {
             // Do nothing.

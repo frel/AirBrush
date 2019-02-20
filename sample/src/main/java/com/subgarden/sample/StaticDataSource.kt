@@ -2,7 +2,7 @@ package com.subgarden.sample
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.support.annotation.DrawableRes
+import androidx.annotation.DrawableRes
 import android.util.Base64
 import com.subgarden.airbrush.AirBrush
 import com.subgarden.airbrush.loaders.TinyThumb

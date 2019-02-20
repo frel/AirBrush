@@ -19,7 +19,7 @@
 }
 
 # RenderScript
--keep class android.support.v8.renderscript.** { *; }
+-keep class android.renderscript.** { *; }
 
 # Glide
 -keep public class * extends com.bumptech.glide.module.AppGlideModule

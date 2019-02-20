@@ -3,7 +3,7 @@ package com.subgarden.sample
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.support.annotation.DrawableRes
+import androidx.annotation.DrawableRes
 
 /**
  * @author Fredrik Larsen <f@subgarden.com>

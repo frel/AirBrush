@@ -30,7 +30,7 @@ void setup() {
 
 void filter() {
     setup();
-    rsForEach(gScript, gIn, gOut, 0, 0);	// for each element of the input allocation,
+    rsForEach(gScript, gIn, gOut);	// for each element of the input allocation,
     										// call root() method on gScript
 }
 
@@ -49,9 +49,9 @@ static float3 getAdjustedColor(int32_t color, float dist) {
     float adjustedGreen = green * dist * dist / 255;
     float adjustedBlue = blue *  dist * dist / 255;
 
-    adjustedColor.x = clamp(adjustedRed, 0, 1);
-    adjustedColor.y = clamp(adjustedGreen, 0, 1);
-    adjustedColor.z = clamp(adjustedBlue, 0, 1);
+    adjustedColor.x = clamp(adjustedRed, 0.0, 1.0);
+    adjustedColor.y = clamp(adjustedGreen, 0.0, 1.0);
+    adjustedColor.z = clamp(adjustedBlue, 0.0, 1.0);
     return adjustedColor;
 }
 

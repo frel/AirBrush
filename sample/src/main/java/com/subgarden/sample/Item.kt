@@ -1,6 +1,6 @@
 package com.subgarden.sample
 
-import android.support.annotation.DrawableRes
+import androidx.annotation.DrawableRes
 import com.subgarden.airbrush.loaders.GradientPalette
 import com.subgarden.airbrush.loaders.TinyThumb
 

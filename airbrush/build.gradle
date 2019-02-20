@@ -16,7 +16,7 @@ ext {
     siteUrl = 'https://github.com/frel/AirBrush'
     gitUrl = 'https://github.com/frel/AirBrush.git'
 
-    libraryVersion = '0.6.1'
+    libraryVersion = '1.0.0'
 
     developerId = 'frel'
     developerName = 'Fredrik H. Larsen'
@@ -28,18 +28,18 @@ ext {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion versions.compileSdk
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 27
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
 
         versionName libraryVersion
-        versionCode 61
+        versionCode 100
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        renderscriptTargetApi 16
-        renderscriptSupportModeEnabled true
+        renderscriptTargetApi versions.minSdk
+        renderscriptSupportModeEnabled false
     }
 
     signingConfigs {
@@ -47,10 +47,18 @@ android {
             Properties properties = new Properties()
             properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
-            storeFile file(properties.getProperty("storeFile"))
-            storePassword properties.getProperty("storePassword")
-            keyAlias properties.getProperty("keyAlias")
-            keyPassword properties.getProperty("keyPassword")
+            if (project.hasProperty("storeFile")) {
+                storeFile file(properties.getProperty("storeFile"))
+            }
+            if (project.hasProperty("storePassword")) {
+                storePassword properties.getProperty("storePassword")
+            }
+            if (project.hasProperty("keyAlias")) {
+                keyAlias properties.getProperty("keyAlias")
+            }
+            if (project.hasProperty("keyPassword")) {
+                keyPassword properties.getProperty("keyPassword")
+            }
         }
     }
 
@@ -65,11 +73,11 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-annotations:$supportLibraryVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "com.android.support:palette-v7:$supportLibraryVersion"
-    implementation "com.github.bumptech.glide:glide:$glideVersion"
-    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
+    implementation "androidx.annotation:annotation:${versions.annotations}"
+    implementation "androidx.palette:palette:${versions.palette}"
+    implementation "com.github.bumptech.glide:glide:${versions.glide}"
+    kapt "com.github.bumptech.glide:compiler:${versions.glide}"
     testImplementation 'junit:junit:4.12'
 }
 

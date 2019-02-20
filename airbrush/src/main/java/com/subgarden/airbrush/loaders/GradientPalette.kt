@@ -1,6 +1,6 @@
 package com.subgarden.airbrush.loaders
 
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 
 /**
  * A color palette describing the color of the four corners of a gradient.
