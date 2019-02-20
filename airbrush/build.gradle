@@ -28,10 +28,10 @@ ext {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
 
         versionName libraryVersion
         versionCode 61
@@ -47,10 +47,18 @@ android {
             Properties properties = new Properties()
             properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
-            storeFile file(properties.getProperty("storeFile"))
-            storePassword properties.getProperty("storePassword")
-            keyAlias properties.getProperty("keyAlias")
-            keyPassword properties.getProperty("keyPassword")
+            if (project.hasProperty("storeFile")) {
+                storeFile file(properties.getProperty("storeFile"))
+            }
+            if (project.hasProperty("storePassword")) {
+                storePassword properties.getProperty("storePassword")
+            }
+            if (project.hasProperty("keyAlias")) {
+                keyAlias properties.getProperty("keyAlias")
+            }
+            if (project.hasProperty("keyPassword")) {
+                keyPassword properties.getProperty("keyPassword")
+            }
         }
     }
 
