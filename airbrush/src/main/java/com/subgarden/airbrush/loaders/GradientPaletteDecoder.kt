@@ -24,7 +24,7 @@ class GradientPaletteDecoder(var context: Context, private val bitmapPool: Bitma
         return true
     }
 
-    override fun decode(gradientPalette: GradientPalette, width: Int, height: Int, options: Options?): Resource<BitmapDrawable> {
+    override fun decode(gradientPalette: GradientPalette, width: Int, height: Int, options: Options): Resource<BitmapDrawable> {
         lateinit var resource: Resource<BitmapDrawable>
         val t = measureTimeMillis {
             // Gradients can be scaled down drastically and still look descent. Later the image view

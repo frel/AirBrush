@@ -9,7 +9,7 @@ import com.bumptech.glide.load.data.DataFetcher
  */
 class GradientPaletteDataFetcher(private val gradientPalette: GradientPalette) : DataFetcher<GradientPalette> {
 
-    override fun loadData(priority: Priority?, callback: DataFetcher.DataCallback<in GradientPalette>) {
+    override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in GradientPalette>) {
         callback.onDataReady(gradientPalette)
     }
 

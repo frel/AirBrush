@@ -1,10 +1,10 @@
 package com.subgarden.sample
 
 import android.annotation.SuppressLint
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -21,7 +21,7 @@ open class GridAdapter(
         private val requestManager: RequestManager)
     : RecyclerView.Adapter<GridAdapter.ViewHolder>() {
 
-    class ViewHolder(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer
+    class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 
     override fun getItemCount(): Int {
         return data.size
