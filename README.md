@@ -128,20 +128,19 @@ AirBrush.blur(context, bitmap, scale, radius)
 
 This is a convenience method for getting a GradientPalette while developing.
 ```kotlin
-AirBrush.getPalette(bitmap);
+AirBrush.getPalette(bitmap)
 ```
 
 
 Minimum SDK supported
 ---------------------
-- 16
+- 21
 
 
 Dependencies (added by AirBrush)
 --------------------------------
-- [Glide] 4.3.1 or newer
-- [RenderScript]
-- [Palette]
+- [Glide] 
+- [Palette] 
 
 Download
 --------
@@ -152,22 +151,9 @@ repositories {
 }
 
 dependencies {
-    implementation "com.subgarden.android:airbrush:0.6.1"
+    implementation "com.subgarden.android:airbrush:1.0.0"
 }
 ```
-
-Remember to add RenderScript to your app's gradle build config:
-
-```
-android {
-    defaultConfig {
-        renderscriptTargetApi 16
-        renderscriptSupportModeEnabled true
-
-    }
-}
-``` 
-
 
 License
 -------

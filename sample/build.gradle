@@ -12,8 +12,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        renderscriptTargetApi versions.minSdk
-        renderscriptSupportModeEnabled true
 
     }
     buildTypes {
@@ -30,7 +28,7 @@ android {
 dependencies {
     // Switch to test the artifact or the project
     implementation project(path: ':airbrush')
-//    implementation "com.subgarden.android:airbrush:0.6.1"
+//    implementation "com.subgarden.android:airbrush:1.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha4', {

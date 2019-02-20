@@ -1,15 +1,16 @@
 package com.subgarden.airbrush
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
 import androidx.annotation.WorkerThread
 import androidx.palette.graphics.Palette
-import androidx.renderscript.Allocation
-import androidx.renderscript.Element
-import androidx.renderscript.RenderScript
-import androidx.renderscript.ScriptIntrinsicBlur
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
 import com.subgarden.airbrush.loaders.GradientPalette
 
 /**
@@ -23,6 +24,7 @@ class AirBrush(private val context: Context) {
 
     companion object {
         /** The reusable RenderScript instance */
+        @SuppressLint("StaticFieldLeak")
         private var renderScript: RenderScript? = null
 
         private fun getRenderScript(context: Context) : RenderScript {

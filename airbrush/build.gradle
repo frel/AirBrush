@@ -16,7 +16,7 @@ ext {
     siteUrl = 'https://github.com/frel/AirBrush'
     gitUrl = 'https://github.com/frel/AirBrush.git'
 
-    libraryVersion = '0.6.1'
+    libraryVersion = '1.0.0'
 
     developerId = 'frel'
     developerName = 'Fredrik H. Larsen'
@@ -34,12 +34,12 @@ android {
         targetSdkVersion versions.targetSdk
 
         versionName libraryVersion
-        versionCode 61
+        versionCode 100
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         renderscriptTargetApi versions.minSdk
-        renderscriptSupportModeEnabled true
+        renderscriptSupportModeEnabled false
     }
 
     signingConfigs {

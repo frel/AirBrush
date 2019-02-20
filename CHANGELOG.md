@@ -1,5 +1,14 @@
 # AirBrush changelog
 
+## Version 1.0.0
+
+- The library is now considered stable 🎉
+- Bumped minSdk and renderscriptTargetApi to 21 in order to support x86_64 ABI. 
+- Removed RenderScript support library (not required)
+- Cleaned up dependency versions
+- Migrated to AndroidX 
+
+
 ## Version 0.6.1
 
 A few enhancements: 
