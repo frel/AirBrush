@@ -1,3 +1,8 @@
+[ ![Download](https://api.bintray.com/packages/frel/maven/AirBrush/images/download.svg) ](https://bintray.com/frel/maven/AirBrush/_latestVersion)
+# Moved to GitLab
+The repo has moved to https://gitlab.com/fredriklarsen/AirBrush
+
+
 # AirBrush
 
 ![Logo](website/airbrush-logo.png)
