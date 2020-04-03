@@ -85,6 +85,7 @@ class AirBrush(private val context: Context) {
             theIntrinsic.forEach(tmpOut)
             tmpOut.copyTo(outputBitmap)
 
+            theIntrinsic.destroy()
             return outputBitmap
         }
 
